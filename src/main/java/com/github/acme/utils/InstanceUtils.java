@@ -148,18 +148,4 @@ public class InstanceUtils {
         return instance(iu.getInstance(InstanceUtils.class)) + 1;
     }
 
-    public static void main(String[] args) {
-Object o1 = InstanceUtils.getInstance().getInstance(Object.class);
-Object o2 = InstanceUtils.getInstance().getInstance(Object.class);
-Object o3 = InstanceUtils.getInstance().getInstance(InstanceUtils.class).getInstance(Object.class);
-Object o4 = InstanceUtils.getInstance().getInstance(InstanceUtils.class).getInstance(Object.class);
-System.out.println(o1 == o2); // true
-System.out.println(o2 == o3); // false
-System.out.println(o3 == o4); // true
-
-int i = InstanceUtils.getInstance(3).instance();
-int n = InstanceUtils.instances();
-System.out.println("That was instance " + i + " of " + n);
-    }
-
 }
