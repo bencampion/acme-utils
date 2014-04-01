@@ -75,7 +75,7 @@ public class AcmeUtils {
      *            a separator string to use between the objects
      * @return the joined string
      */
-    public static String join(Iterable<?> objects, final String seperator) {
+    public static String join(Iterable<?> objects, final String separator) {
 
         final Iterator<?> i = objects.iterator();
 
@@ -92,7 +92,7 @@ public class AcmeUtils {
 
                 @Override
                 public String toString() {
-                    return l + seperator + r;
+                    return l + separator + r;
                 }
             };
         }
