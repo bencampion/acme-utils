@@ -15,6 +15,8 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 public class AcmeUtils {
 
+    private AcmeUtils() {}
+
     /**
      * Attempts to sorts a list of integers using sleep sort. A sleep factor is
      * used to tune the algorithm. Lower sleep factors make the sort
@@ -148,7 +150,7 @@ public class AcmeUtils {
      * Throws an exception. Unlike the throw keyword, this method can be used to throw checked
      * exceptions from methods that don't declare checked exception. This allows you to write
      * simpler, more succinct code.
-     * 
+     *
      * @param e exception to throw
      */
     public static void throwChecked(Exception e) {
