@@ -8,7 +8,9 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class AcmeUtilsTest {
 
@@ -42,6 +44,24 @@ public class AcmeUtilsTest {
     public void join_emptyList_returnsEmptyString() {
         String joined = AcmeUtils.join(Collections.emptyList(), ",");
         assertThat(joined, is(""));
+    }
+
+    @Test
+    public void negateBoxedBooleanConstants_makesTrueEqualFalse() {
+        AcmeUtils.negateBoxedBooleanConstants();
+        assertFalse(Boolean.TRUE);
+
+        AcmeUtils.negateBoxedBooleanConstants();
+        assertTrue(Boolean.TRUE);
+    }
+
+    @Test
+    public void negateBoxedBooleanConstants_makesFalseEqualTrue() {
+        AcmeUtils.negateBoxedBooleanConstants();
+        assertTrue(Boolean.FALSE);
+
+        AcmeUtils.negateBoxedBooleanConstants();
+        assertFalse(Boolean.FALSE);
     }
 
 }

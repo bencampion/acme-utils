@@ -1,5 +1,7 @@
 package uk.recurse.acme.utils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -93,6 +95,34 @@ public class AcmeUtils {
         }
 
         return tree.toString();
+    }
+
+    /**
+     * Negates the Boolean.TRUE and Boolean.FALSE "constants". This can be useful
+     * when you make a breaking change and need to quickly fix a failing unit test.
+     */
+    public static void negateBoxedBooleanConstants() {
+        try {
+            if (Boolean.TRUE) {
+                setBooleanConstant("TRUE", new Boolean(false));
+                setBooleanConstant("FALSE", new Boolean(true));
+            } else {
+                setBooleanConstant("TRUE", new Boolean(true));
+                setBooleanConstant("FALSE", new Boolean(false));
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+
+    private static void setBooleanConstant(String name, Boolean value) throws ReflectiveOperationException {
+        Field field = Boolean.class.getField(name);
+        field.setAccessible(true);
+        Field modifiers = Field.class.getDeclaredField("modifiers");
+        modifiers.setAccessible(true);
+        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        field.set(null, value);
     }
 
 }
