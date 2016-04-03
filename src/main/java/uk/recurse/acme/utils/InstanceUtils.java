@@ -1,4 +1,4 @@
-package com.github.acme.utils;
+package uk.recurse.acme.utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

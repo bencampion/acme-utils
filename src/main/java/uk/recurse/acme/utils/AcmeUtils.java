@@ -1,4 +1,4 @@
-package com.github.acme.utils;
+package uk.recurse.acme.utils;
 
 import java.util.Iterator;
 import java.util.List;
