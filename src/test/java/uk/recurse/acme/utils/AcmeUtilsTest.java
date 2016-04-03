@@ -72,4 +72,9 @@ public class AcmeUtilsTest {
         AcmeUtils.replaceChar(lol, 2, 'f');
         assertThat(lol, is(new String("wtf")));
     }
+
+    @Test(expected = Exception.class)
+    public void throwChecked_throwsCheckedException() {
+        AcmeUtils.throwChecked(new Exception());
+    }
 }

@@ -143,4 +143,15 @@ public class AcmeUtils {
             throw new IllegalStateException(e);
         }
     }
+
+    /**
+     * Throws an exception. Unlike the throw keyword, this method can be used to throw checked
+     * exceptions from methods that don't declare checked exception. This allows you to write
+     * simpler, more succinct code.
+     * 
+     * @param e exception to throw
+     */
+    public static void throwChecked(Exception e) {
+        Thread.currentThread().stop(e);
+    }
 }
