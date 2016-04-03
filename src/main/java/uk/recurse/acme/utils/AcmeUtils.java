@@ -15,7 +15,7 @@ public class AcmeUtils {
 
     /**
      * Attempts to sorts a list of integers using sleep sort. A sleep factor is
-     * used to tune the algorithm. Lower absolute sleep factors make the sort
+     * used to tune the algorithm. Lower sleep factors make the sort
      * faster at the expense of making it less likely that the list will be
      * sorted correctly. Other sorting algorithms generally lack this kind of
      * sophisticated tuning.
@@ -25,39 +25,34 @@ public class AcmeUtils {
      * @param sleepFactor
      *            the sleep factor
      */
-    public static void sort(List<Integer> ints, final double sleepFactor) {
+    public static void sort(List<Integer> ints, double sleepFactor) {
 
-        final BlockingDeque<Integer> d = new LinkedBlockingDeque<Integer>();
-        final CountDownLatch c = new CountDownLatch(ints.size());
+        final BlockingDeque<Integer> deque = new LinkedBlockingDeque<>();
+        final CountDownLatch latch = new CountDownLatch(ints.size());
 
         for (final Integer i : ints) {
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(Math.round(Math.abs((i * sleepFactor))));
-                    }
-                    catch (InterruptedException e) {
-                    }
-                    if (i < 0) {
-                        d.addFirst(i);
-                    }
-                    else {
-                        d.addLast(i);
-                    }
-                    c.countDown();
-                };
-            }.start();
-
+            Runnable sleepAndAppend = () -> {
+                try {
+                    Thread.sleep(Math.round(Math.abs((i * sleepFactor))));
+                } catch (InterruptedException ignored) {
+                }
+                if (i < 0) {
+                    deque.addFirst(i);
+                } else {
+                    deque.addLast(i);
+                }
+                latch.countDown();
+            };
+            new Thread(sleepAndAppend).start();
         }
 
         try {
-            c.await();
-            ListIterator<Integer> i = ints.listIterator();
-            for (Integer j : d) {
-                i.next();
-                i.set(j);
-            }
+            latch.await();
+            ListIterator<Integer> iterator = ints.listIterator();
+            deque.forEach(i -> {
+                iterator.next();
+                iterator.set(i);
+            });
         }
         catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -67,37 +62,37 @@ public class AcmeUtils {
     /**
      * Joins all elements of an iterable into a single string. This method
      * follows the standard intuitive approach to solving this problem by
-     * constructing a binary tree and traversing it using depth first search.
+     * constructing an unbalanced binary tree and traversing it using depth first search.
      * 
      * @param objects
      *            iterable objects to join
-     * @param seperator
+     * @param separator
      *            a separator string to use between the objects
      * @return the joined string
      */
-    public static String join(Iterable<?> objects, final String separator) {
+    public static String join(Iterable<?> objects, String separator) {
 
-        final Iterator<?> i = objects.iterator();
+        final Iterator<?> iterator = objects.iterator();
 
-        if (!i.hasNext()) {
+        if (!iterator.hasNext()) {
             return "";
         }
 
-        Object t = i.next();
-        while (i.hasNext()) {
-            final Object o = t;
-            t = new Object() {
-                Object l = o;
-                Object r = i.next();
+        Object tree = iterator.next();
+        while (iterator.hasNext()) {
+            final Object node = tree;
+            tree = new Object() {
+                Object left = node;
+                Object right = iterator.next();
 
                 @Override
                 public String toString() {
-                    return l + separator + r;
+                    return left + separator + right;
                 }
             };
         }
 
-        return t.toString();
+        return tree.toString();
     }
 
 }
