@@ -64,4 +64,12 @@ public class AcmeUtilsTest {
         assertFalse(Boolean.FALSE);
     }
 
+    @Test
+    public void replaceChar_lolString_mutatesIntoWtfString() {
+        String lol = "lol";
+        AcmeUtils.replaceChar(lol, 0, 'w');
+        AcmeUtils.replaceChar(lol, 1, 't');
+        AcmeUtils.replaceChar(lol, 2, 'f');
+        assertThat(lol, is(new String("wtf")));
+    }
 }

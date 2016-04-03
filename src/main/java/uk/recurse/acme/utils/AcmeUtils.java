@@ -125,4 +125,22 @@ public class AcmeUtils {
         field.set(null, value);
     }
 
+    /**
+     * Mutates the "immutable" string s by replacing the ith character with c. This avoids the
+     * overhead of creating new String just because you need to change a few characters in it.
+     *
+     * @param s string to mutate
+     * @param i index of character to replace
+     * @param c replacement character
+     */
+    public static void replaceChar(String s, int i, char c) {
+        try {
+            Field valueField = String.class.getDeclaredField("value");
+            valueField.setAccessible(true);
+            char[] value = (char[]) valueField.get(s);
+            value[i] = c;
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }
